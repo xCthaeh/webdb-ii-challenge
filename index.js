@@ -128,6 +128,23 @@ server.post("/api/bears", (req, res) => {
   }
 });
 
+server.delete("/api/bears/:id", (req, res) => {
+  const bearId = req.params.id;
+  db("bears")
+    .where({ id: bearId })
+    .del()
+    .then(count => {
+      if (count) {
+        res.status(200).json({ count });
+      } else {
+        res
+          .status(404)
+          .json({ error: "Can't delete a bear that doesn't exist! :o" });
+      }
+    })
+    .catch(err => res.status(500).json({ error: err }));
+});
+
 const port = 3300;
 server.listen(port, function() {
   console.log(`\n=== Web API Listening on http://localhost:${port} ===\n`);
