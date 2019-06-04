@@ -112,6 +112,22 @@ server.put("/api/bears/:id", (req, res) => {
     });
 });
 
+server.post("/api/bears", (req, res) => {
+  const bear = req.body;
+  if (bear.name) {
+    db("bears")
+      .insert(bear)
+      .then(ids => {
+        res.status(201).json(ids);
+      })
+      .catch(err => {
+        res.status(500).json({ error: err });
+      });
+  } else {
+    res.status(400).json({ error: "Zoo name not valid" });
+  }
+});
+
 const port = 3300;
 server.listen(port, function() {
   console.log(`\n=== Web API Listening on http://localhost:${port} ===\n`);
