@@ -76,6 +76,22 @@ server.delete("/api/zoos/:id", (req, res) => {
     .catch(err => res.status(500).json({ error: err }));
 });
 
+//Stretch "Bears" end-points
+
+server.get("/api/bears", (req, res) => {
+  db("bears")
+    .then(bears => res.status(200).json(bears))
+    .catch(err => res.status(500).json({ error: err }));
+});
+
+server.get("/api/bears/:id", (req, res) => {
+  const bearId = req.params.id;
+  db("bears")
+    .where({ id: bearId })
+    .then(bearInfo => res.status(200).json(bearInfo))
+    .catch(err => res.status(500).json({ error: err }));
+});
+
 const port = 3300;
 server.listen(port, function() {
   console.log(`\n=== Web API Listening on http://localhost:${port} ===\n`);
