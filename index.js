@@ -92,6 +92,26 @@ server.get("/api/bears/:id", (req, res) => {
     .catch(err => res.status(500).json({ error: err }));
 });
 
+server.put("/api/bears/:id", (req, res) => {
+  const changes = req.body;
+  const bearId = req.params.id;
+  db("bears")
+    .where({ id: bearId })
+    .update(changes)
+    .then(count => {
+      if (count) {
+        res.status(200).json({ count });
+      } else {
+        res
+          .status(404)
+          .json({ error: "No fluffy friend with this ID was spotted" });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ error: err });
+    });
+});
+
 const port = 3300;
 server.listen(port, function() {
   console.log(`\n=== Web API Listening on http://localhost:${port} ===\n`);
